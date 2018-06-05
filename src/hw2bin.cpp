@@ -15,7 +15,7 @@ int hw2bin(int argc, wchar_t* argv[])
 {
 	if(argc != 4)
 	{
-		std::wprintf(L"%s", L"Invalid number of command line arguments!\nThis command needs COM port number and file name.\nThe file name denotes output for contents of EEPROM (in binary form). You can specify . (dot) instead of output file name for redirection to stdout.\n");
+		std::wprintf(L"%s", L"Invalid number of command line arguments!\nThis command needs COM port number and file name.\nThe file name denotes output for contents of EEPROM (in binary format). You can specify . (dot) instead of output file name for redirection to stdout.\n");
 		return EXIT_FAILURE;
 	}
 
@@ -54,7 +54,7 @@ int hw2bin_impl(std::uint8_t const& com_port_number, wchar_t const* const& file_
 	});
 
 	windows_file_byte_writer wfbw(file_handle);
-	auto writer = make_buffered_writer(wfbw);
+	auto wrtr = buffered_writer(writer(std::ref(wfbw)));
 
 	unsigned addr_old = 0;
 	unsigned const cycles = 0x8'0000u / sizeof(comm_response_packet::payload_t);
@@ -62,7 +62,7 @@ int hw2bin_impl(std::uint8_t const& com_port_number, wchar_t const* const& file_
 	{
 		unsigned const addr = i * sizeof(comm_response_packet::payload_t);
 		comm_response_packet const response_packet = com.read_flash_block(address24_t{addr});
-		writer.write_bytes(response_packet.m_payload.data(), response_packet.m_payload.size());
+		wrtr.write_bytes(response_packet.m_payload.data(), static_cast<std::uint32_t>(response_packet.m_payload.size()));
 		if(prgs)
 		{
 			prgs->worker_thread__update_progress(addr);
@@ -77,7 +77,7 @@ int hw2bin_impl(std::uint8_t const& com_port_number, wchar_t const* const& file_
 	}
 	unsigned const rest = 0x8'0000 - cycles * sizeof(comm_response_packet::payload_t);
 	comm_response_packet const response_packet = com.read_flash_block(address24_t{0x8'0000 - rest});
-	writer.write_bytes(response_packet.m_payload.data(), rest);
+	wrtr.write_bytes(response_packet.m_payload.data(), rest);
 
 	int const exit_code = EXIT_SUCCESS;
 	if(prgs)

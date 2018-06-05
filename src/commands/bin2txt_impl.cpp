@@ -1,7 +1,7 @@
 #include "c:/dev/git/github/joboccara/NamedType/named_type.hpp"
 
-#include "utils/verify.h"
-#include "utils/scope_exit.h"
+#include "../utils/verify.h"
+#include "../utils/scope_exit.h"
 
 #include <array>
 #include <algorithm>
@@ -14,7 +14,7 @@
 
 #include <windows.h>
 
-
+#if 0
 using digital_io = fluent::NamedType<std::uint8_t, struct digital_io_tag, fluent::Comparable>;
 
 using volts_10 = fluent::NamedType<double, struct volts_10_tag>;
@@ -122,6 +122,10 @@ volts_01 convert_to_volts_01(volts_01 const& v)
 }
 
 double round_to_nearest_ties_to_even(double const& d);
+double round_to_nearest_ties_to_even(double const& d)
+{
+  return d - std::remainder(d, 1.0);
+}
 
 std::uint8_t control_byte(erange const& range, erate const& rate, std::uint8_t const& digital_out)
 {
@@ -341,7 +345,7 @@ int Bin2Txt()
 			}
 			if(!str.empty())
 			{
-				auto const len = std::strlen(str.data());
+				auto const len = static_cast<std::uint32_t>(std::strlen(str.data()));
 				DWORD written;
 				BOOL const ret = WriteFile(block.handle, str.data(), len, &written, nullptr);
 				VERIFY(ret != 0);
@@ -389,7 +393,7 @@ int Bin2Txt()
 		static_assert(std::is_same_v<std::uint32_t, unsigned>, "");
 		std::snprintf(const_cast<char*>(str.data()), 15, "%u\x0D\x0A", val_uint);
 		{
-			auto const len = std::strlen(str.data());
+			auto const len = static_cast<std::uint32_t>(std::strlen(str.data()));
 			DWORD written;
 			BOOL const ret = WriteFile(outc, str.data(), len, &written, nullptr);
 			VERIFY(ret != 0);
@@ -420,9 +424,70 @@ int Bin2Txt()
 
 	return 0;
 }
+#endif
 
 
-int bin2txt(int argc, wchar_t* argv[])
+
+
+
+
+
+
+
+#include "../io/windows_file.h"
+#include "../io/windows_file_byte_reader.h"
+#include "../io/windows_file_byte_writer.h"
+#include "../io/buffered_reader.h"
+#include "../io/buffered_writer.h"
+#include "../io/txt_writer.h"
+#include "../io/writer.h"
+
+
+int bin2txt_impl(wchar_t const* const& input_file_name, wchar_t const* const& output_bank1_file_name, wchar_t const* const& output_bank2_file_name, wchar_t const* const& output_bank3_file_name, wchar_t const* const& output_bank4_file_name, wchar_t const* const& output_calibration_file_name)
 {
-	return Bin2Txt();
+#if 0
+	auto input_file = windows_file::make_for_input_redirectable(input_file_name);
+	auto wfbr = windows_file_byte_reader{input_file.get_handle()};
+	auto reader = make_buffered_reader(wfbr);
+
+	auto output_file = windows_file::make_for_output_redirectable(output_bank1_file_name);
+	auto wfbw = windows_file_byte_writer{output_file.get_handle()};
+	auto bw = buffered_writer(wfbw);
+	auto wrtr = txt_writer(writer{std::move(bw)});
+
+
+
+	//auto a = writer{buffered_writer<windows_file_byte_writer>{windows_file_byte_writer{HANDLE{}}}};
+	//auto pa = new writer{buffered_writer<windows_file_byte_writer>{windows_file_byte_writer{HANDLE{}}}};
+	//auto p2 = new writer[2]{buffered_writer<windows_file_byte_writer>{windows_file_byte_writer{HANDLE{}}}, buffered_writer<windows_file_byte_writer>{windows_file_byte_writer{HANDLE{}}}};
+
+	auto a = writer{windows_file_byte_writer{HANDLE{}}};
+	//auto b = writer{a};
+	auto c = writer{writer{windows_file_byte_writer{HANDLE{}}}};
+	auto d = writer{};
+	auto e = writer{std::ref(std::ref(bw))};
+	e.write_bytes(nullptr, 0);
+#endif
+	(void)input_file_name;
+	(void)output_bank1_file_name;
+	(void)output_bank2_file_name;
+	(void)output_bank3_file_name;
+	(void)output_bank4_file_name;
+	(void)output_calibration_file_name;
+
+	windows_file_byte_writer wfbw{HANDLE{}};
+	buffered_writer bw{writer{std::ref(wfbw)}};
+
+	writer w{std::ref(bw)};
+	w.write_bytes(nullptr, 0);
+	return EXIT_SUCCESS;
 }
+
+
+
+
+
+class XXX : public buffered_writer
+{
+};
+

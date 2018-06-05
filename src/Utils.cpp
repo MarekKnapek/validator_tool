@@ -4,11 +4,8 @@
 
 #include <algorithm> // std::all_of
 #include <cstdlib> // std::exit
-#include <iterator> // std::cbegin std::cend std::size
 #include <memory> // std::addressof
-
-
-static const char s_hex_alphabet[] = "0123456789ABCDEF";
+#include <iterator> // std::size
 
 
 address24_t::address24_t() :

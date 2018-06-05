@@ -5,6 +5,11 @@
 #include <cstdint> // std:: uint8_t std::uint32_t
 
 
+static constexpr char const s_hex_alphabet[] = "0123456789ABCDEF";
+static constexpr std::uint8_t const s_CR = 0x0D;
+static constexpr std::uint8_t const s_LF = 0x0A;
+
+
 struct hex_byte_t
 {
 	std::array<std::uint8_t, 2> m_data;

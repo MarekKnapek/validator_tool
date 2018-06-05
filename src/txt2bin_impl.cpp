@@ -1,6 +1,7 @@
 #include "txt2bin_impl.h"
-
+#if 0
 #include "utils/verify.h"
+#include "io/writer.h"
 #include "Utils.h" // VERIFY
 #include "utils/scope_exit.h" // CswMakeScopeExit
 #include "io/line_reader.h"
@@ -126,7 +127,7 @@ int txt2bin_impl(wchar_t const* const& block1_file_name, wchar_t const* const& b
 	};
 
 	windows_file_byte_writer byte_writer(eeprom_file_handle);
-	auto writer = make_buffered_writer(byte_writer);
+	auto wrtr = buffered_writer(writer(std::ref(byte_writer)));
 	std::uint32_t address = 0;
 	for(auto const& block : blocks)
 	{
@@ -144,7 +145,7 @@ int txt2bin_impl(wchar_t const* const& block1_file_name, wchar_t const* const& b
 			{
 				continue;
 			}
-			writer.write_bytes(sample.data(), static_cast<int>(sample.size()));
+			wrtr.write_bytes(sample.data(), static_cast<int>(sample.size()));
 			address += static_cast<std::uint32_t>(sample.size());
 			VERIFY(address <= block.end_addr);
 		}
@@ -152,7 +153,7 @@ int txt2bin_impl(wchar_t const* const& block1_file_name, wchar_t const* const& b
 		for(int i = address; i != block.end_addr - 1; ++i)
 		{
 			std::uint8_t const byte = s_default_byte;
-			writer.write_bytes(&byte, 1);
+			wrtr.write_bytes(&byte, 1);
 			++address;
 			VERIFY(address <= block.end_addr);
 		}
@@ -161,7 +162,7 @@ int txt2bin_impl(wchar_t const* const& block1_file_name, wchar_t const* const& b
 		{
 			// but surprise, surprise, end of block 4 is not screwed
 			std::uint8_t const byte = block.end_addr == s_block4end ? s_default_byte : 0x00;
-			writer.write_bytes(&byte, 1);
+			wrtr.write_bytes(&byte, 1);
 			++address;
 			VERIFY(address <= block.end_addr);
 		}
@@ -190,7 +191,7 @@ int txt2bin_impl(wchar_t const* const& block1_file_name, wchar_t const* const& b
 		cal_checksum += sample[0];
 		cal_checksum += sample[1];
 		cal_checksum += sample[2];
-		writer.write_bytes(sample.data(), static_cast<int>(sample.size()));
+		wrtr.write_bytes(sample.data(), static_cast<int>(sample.size()));
 		address += static_cast<std::uint32_t>(sample.size());
 		++cal_lines;
 		VERIFY(address <= s_calib_end);
@@ -200,14 +201,14 @@ int txt2bin_impl(wchar_t const* const& block1_file_name, wchar_t const* const& b
 	VERIFY(cal_lines == s_calibsamples);
 	VERIFY(address == s_checksum_s);
 	cal_checksum = ~cal_checksum + 2; // Constant +2 is empirically proved to be correct.
-	writer.write_bytes(&cal_checksum, 1);
+	wrtr.write_bytes(&cal_checksum, 1);
 	++address;
 	VERIFY(address == s_checksum_e);
 	// here is -1 probably because somebody screw up and made off-by-one error in validator3.exe
 	for(std::uint32_t i = address; i != s_flashend - 1; ++i)
 	{
 		std::uint8_t const byte = s_default_byte;
-		writer.write_bytes(&byte, 1);
+		wrtr.write_bytes(&byte, 1);
 		++address;
 		VERIFY(address <= s_flashend);
 	}
@@ -215,7 +216,7 @@ int txt2bin_impl(wchar_t const* const& block1_file_name, wchar_t const* const& b
 	if(address <= s_flashend)
 	{
 		std::uint8_t const byte = 0x00;
-		writer.write_bytes(&byte, 1);
+		wrtr.write_bytes(&byte, 1);
 		++address;
 		VERIFY(address <= s_flashend);
 	}
@@ -230,14 +231,14 @@ bool create_sample(line_view const& file_line, std::array<std::uint8_t, 3>& samp
 	{
 		return false;
 	}
-	if(file_line.cbegin()[0] == '*')
+	if(cbegin(file_line)[0] == '*')
 	{
 		return false;
 	}
 	
-	if(file_line.cbegin()[0] == 'R')
+	if(cbegin(file_line)[0] == 'R')
 	{
-		long const val = string_to_long(line_view{cbegin(file_line) + 1, size(file_line) - 1});
+		long const val = string_to_long(line_view{cbegin(file_line) + 1, file_line.size() - 1});
 		VERIFY(val == 1 || val == 10 || val == 100);
 		switch(val)
 		{
@@ -253,9 +254,9 @@ bool create_sample(line_view const& file_line, std::array<std::uint8_t, 3>& samp
 		return true;
 	}
 
-	if(file_line.cbegin()[0] == 'F')
+	if(cbegin(file_line)[0] == 'F')
 	{
-		long const val = string_to_long(line_view{cbegin(file_line) + 1, size(file_line) - 1});
+		long const val = string_to_long(line_view{cbegin(file_line) + 1, file_line.size() - 1});
 		VERIFY(val == 10 || val == 25 || val == 50 || val == 100);
 		switch(val)
 		{
@@ -272,9 +273,9 @@ bool create_sample(line_view const& file_line, std::array<std::uint8_t, 3>& samp
 		return true;
 	}
 
-	if(file_line.cbegin()[0] == 'D')
+	if(cbegin(file_line)[0] == 'D')
 	{
-		long const val = string_to_long(line_view{cbegin(file_line) + 1, size(file_line) - 1});
+		long const val = string_to_long(line_view{cbegin(file_line) + 1, file_line.size() - 1});
 		VERIFY(val >= 0x00 && val <= 0x0F);
 		current_dio = digital_io{static_cast<std::uint8_t>(val)};
 		std::array<std::uint8_t, 3> ret;
@@ -285,9 +286,9 @@ bool create_sample(line_view const& file_line, std::array<std::uint8_t, 3>& samp
 		return true;
 	}
 
-	if(file_line.cbegin()[0] == 'J')
+	if(cbegin(file_line)[0] == 'J')
 	{
-		long const val = string_to_long(line_view{cbegin(file_line) + 1, size(file_line) - 1});
+		long const val = string_to_long(line_view{cbegin(file_line) + 1, file_line.size() - 1});
 		VERIFY(val >= 1 && val <= 4);
 		std::array<std::uint8_t, 3> ret;
 		ret[0] = static_cast<std::uint8_t>(val);
@@ -337,3 +338,5 @@ std::array<std::uint8_t, 3> convert_to_volts_binary(volts_10 const& v)
 		(bits >> 16) & 0xFFu
 	};
 }
+
+#endif

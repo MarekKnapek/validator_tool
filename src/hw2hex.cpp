@@ -7,6 +7,8 @@
 #include "utils/verify.h"
 #include "io/buffered_writer.h"
 #include "io/srec_writer.h"
+#include "utils/convert.h"
+#include "io/line_view.h"
 
 #include <windows.h>
 #include <cwchar>
@@ -55,8 +57,8 @@ int hw2hex_impl(std::uint8_t const& com_port_number, wchar_t const* const& file_
 	});
 
 	windows_file_byte_writer wfbw(file_handle);
-	auto buffered_writer = make_buffered_writer(wfbw);
-	auto writer = make_srec_writer(buffered_writer);
+	auto bw = buffered_writer(writer(std::ref(wfbw)));
+	auto wrtr = make_srec_writer(bw);
 
 	unsigned addr_old = 0;
 	unsigned const cycles = 0x8'0000u / sizeof(comm_response_packet::payload_t);
@@ -64,7 +66,7 @@ int hw2hex_impl(std::uint8_t const& com_port_number, wchar_t const* const& file_
 	{
 		unsigned const addr = i * sizeof(comm_response_packet::payload_t);
 		comm_response_packet const response_packet = com.read_flash_block(address24_t{addr});
-		writer.write_bytes(response_packet.m_payload.data(), response_packet.m_payload.size());
+		wrtr.write_bytes(response_packet.m_payload.data(), static_cast<std::uint32_t>(response_packet.m_payload.size()));
 		if(prgs)
 		{
 			prgs->worker_thread__update_progress(addr);
@@ -79,7 +81,7 @@ int hw2hex_impl(std::uint8_t const& com_port_number, wchar_t const* const& file_
 	}
 	unsigned const rest = 0x8'0000 - cycles * sizeof(comm_response_packet::payload_t);
 	comm_response_packet const response_packet = com.read_flash_block(address24_t{0x8'0000 - rest});
-	writer.write_bytes(response_packet.m_payload.data(), rest);
+	wrtr.write_bytes(response_packet.m_payload.data(), rest);
 
 	int const exit_code = EXIT_SUCCESS;
 	if(prgs)

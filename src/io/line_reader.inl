@@ -6,26 +6,17 @@
 #include "line_reader.h"
 
 #include "line_view.h" // line_view
+#include "../Utils.h"
 
 #include <algorithm> // std::copy
-#include <iterator> // std::begin std::cbegin std::cend
-
-
-static std::uint8_t const s_CR = 0x0D;
-static std::uint8_t const s_LF = 0x0A;
-
-
-using std::begin;
-using std::cbegin;
-using std::cend;
 
 
 template<typename T>
 line_reader<T>::line_reader(T& byte_reader) :
-	m_byte_reader(byte_reader),
 	m_buffer(),
 	m_idx(static_cast<std::uint32_t>(m_buffer.size())),
-	m_end(static_cast<std::uint32_t>(m_buffer.size()))
+	m_end(static_cast<std::uint32_t>(m_buffer.size())),
+	m_byte_reader(byte_reader)
 {
 }
 

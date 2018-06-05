@@ -1,9 +1,9 @@
 #include <cstdlib> // EXIT_FAILURE EXIT_SUCCESS
 #include <cwchar> // std::wcscmp std::wprintf
 
-#include "bin2hex.h"
-#include "bin2txt.h"
-#include "hex2bin.h"
+#include "commands/bin2hex.h" // s_command_bin2hex bin2hex
+#include "commands/bin2txt.h" // s_command_bin2txt bin2txt
+#include "commands/hex2bin.h" // s_command_hex2bin hex2bin
 #include "hw2bin.h"
 #include "hw2hex.h"
 #include "hw2hex.h"
@@ -22,11 +22,11 @@ static command const s_commands[] =
 {
 	{s_command_bin2hex, &bin2hex},
 	{s_command_bin2txt, &bin2txt},
+
 	{s_command_hex2bin, &hex2bin},
 	{s_command_hw2bin, &hw2bin},
 	{s_command_hw2hex, &hw2hex},
-	{s_command_test, &tests},
-	{s_command_txt2bin, &txt2bin},
+	{s_command_test, &tests}
 };
 
 
@@ -41,6 +41,7 @@ int wmain(int argc, wchar_t* argv[])
 		}
 		return EXIT_FAILURE;
 	}
+
 	for(auto const& c : s_commands)
 	{
 		if(std::wcscmp(argv[1], c.m_string) == 0)
@@ -48,6 +49,7 @@ int wmain(int argc, wchar_t* argv[])
 			return (*c.m_function)(argc, argv);
 		}
 	}
+
 	std::wprintf(L"%s", L"Unknown command line argument!\n");
 	return EXIT_FAILURE;
 }

@@ -21,12 +21,12 @@ void line_reader_tests()
 		line_view line;
 		VERIFY(reader.read_line(line) == true);
 		VERIFY(line.size() == 1);
-		VERIFY(*line.begin() == 'a');
+		VERIFY(*cbegin(line) == 'a');
 		VERIFY(reader.read_line(line) == true);
 		VERIFY(line.size() == 1);
-		VERIFY(*line.begin() == 'b');
+		VERIFY(*cbegin(line) == 'b');
 		VERIFY(reader.read_line(line) == true);
 		VERIFY(line.size() == 1);
-		VERIFY(*line.begin() == 'c');
+		VERIFY(*cbegin(line) == 'c');
 	}
 }

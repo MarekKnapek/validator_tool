@@ -3,32 +3,45 @@
 #define buffered_writer_h_included
 
 
-#include <array> // std::array
+#include "../utils/type_traits.h" // is_writer_trait
+#include "../utils/windows_memory.h" // virtual_free_deleter
+#include "writer.h" // writer
+
 #include <cstdint> // std::uint8_t std::uint32_t
+#include <type_traits> // std::true_type
 
 
-static std::uint32_t const s_buffered_writer_buffer_size = 4 * 1024;
-static std::uint32_t const s_buffered_writer_buffer_align = 4 * 1024;
-
-
-template<typename T>
 class buffered_writer
 {
 public:
-	buffered_writer(T& byte_writer);
+	buffered_writer() noexcept;
+	buffered_writer(buffered_writer const&) = delete;
+	buffered_writer(buffered_writer&& other) noexcept;
+	buffered_writer& operator=(buffered_writer const&) = delete;
+	buffered_writer& operator=(buffered_writer&&) noexcept;
 	~buffered_writer();
+	void swap(buffered_writer& other) noexcept;
+public:
+	buffered_writer(writer&& byte_writer);
+	writer& get(); // unit tests and debug only
+	writer const& get() const; // unit tests and debug only
 	void write_bytes(std::uint8_t const* const& buffer, std::uint32_t const& size);
 private:
-	T& m_byte_writer;
+	void write_bytes_nocheck(std::uint8_t const* const& buffer, std::uint32_t const& size);
+private:
+	writer m_byte_writer;
+	std::unique_ptr<std::uint8_t, virtual_free_deleter> m_buffer;
 	std::uint32_t m_idx;
-	__declspec(align(s_buffered_writer_buffer_align)) std::array<std::uint8_t, s_buffered_writer_buffer_size> m_buffer;
 };
 
-template<typename T>
-buffered_writer<T> make_buffered_writer(T& byte_writer);
+
+inline void swap(buffered_writer& a, buffered_writer& b) noexcept { a.swap(b); }
 
 
-#include "buffered_writer.inl"
+template<>
+struct is_writer_trait<buffered_writer> : public std::true_type
+{
+};
 
 
 #endif

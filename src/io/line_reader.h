@@ -20,10 +20,10 @@ public:
 	line_reader(T& byte_reader);
 	bool read_line(/* out */ line_view& line);
 private:
-	T& m_byte_reader;
 	__declspec(align(s_line_reader_buffer_align)) std::array<std::uint8_t, s_line_reader_buffer_size * 2> m_buffer;
 	std::uint32_t m_idx;
 	std::uint32_t m_end;
+	T& m_byte_reader;
 };
 
 template<typename T>

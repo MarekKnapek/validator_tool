@@ -21,7 +21,7 @@ long string_to_long(std::uint8_t const* const& begin, std::uint8_t const* const&
 
 long string_to_long(line_view const& line)
 {
-	return string_to_long(line.cbegin(), line.cend());
+	return string_to_long(cbegin(line), cend(line));
 }
 
 double string_to_double(std::uint8_t const* const& begin, std::uint8_t const* const& end)
@@ -36,5 +36,5 @@ double string_to_double(std::uint8_t const* const& begin, std::uint8_t const* co
 
 double string_to_double(line_view const& line)
 {
-	return string_to_double(line.cbegin(), line.cend());
+	return string_to_double(cbegin(line), cend(line));
 }

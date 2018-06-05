@@ -1,4 +1,5 @@
 #pragma once
+#if 0
 #ifndef txt2bin_impl_h_included
 #define txt2bin_impl_h_included
 
@@ -39,4 +40,5 @@ double round_to_nearest_ties_to_even(double const& d);
 std::array<std::uint8_t, 3> convert_to_volts_binary(volts_10 const& v);
 
 
+#endif
 #endif

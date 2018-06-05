@@ -1,5 +1,5 @@
 #include "txt2bin.h"
-
+#if 0
 #include "txt2bin_impl.h"
 
 #include <cwchar> // std::wprintf
@@ -15,3 +15,4 @@ int txt2bin(int argc, wchar_t* argv[])
 	}
 	return txt2bin_impl(argv[2], argv[3], argv[4], argv[5], argv[6], argv[7]);
 }
+#endif

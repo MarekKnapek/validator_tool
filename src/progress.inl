@@ -7,8 +7,11 @@
 
 
 template<typename F, typename... ArgsT>
-void start_progress(progress& prgs, std::uint32_t const& max_steps, F const& f, ArgsT const&... args)
+void start_progress(progress& prgs, std::uint32_t const& max_steps, F const& f, ArgsT const&... /*args*/)
 {
+	(void)prgs;
+	(void)max_steps;
+	(void)f;
 //	prgs.m_max = max_steps;
 //	prgs.m_thread = std::thread{f, args...};
 }

@@ -5,11 +5,11 @@
 #include "comm_write_packet.h"
 #include "utils/verify.h"
 
-#include <cwchar> // std::swprintf
-#include <iterator> // std::size
-#include <numeric>
 #include <algorithm>
+#include <array>
+#include <cwchar> // std::swprintf
 #include <memory>
+#include <numeric>
 
 #include <windows.h> // CreateFileW GENERIC_READ GENERIC_WRITE OPEN_EXISTING FILE_ATTRIBUTE_NORMAL HANDLE INVALID_HANDLE_VALUE CloseHandle
 
@@ -26,15 +26,16 @@ static std::uint8_t const s_comm_response_write_flash = s_comm_command_write_fla
 static std::uint8_t const s_comm_response_erase_flash = s_comm_command_erase_flash | 0x80;
 
 
-com_port::com_port(std::uint8_t const& com_number) :
+com_port::com_port(std::uint8_t const& /*com_number*/) :
 	m_handle()
 {
-	wchar_t buff[256];
+#if 0
+	std::array<wchar_t, 256> buff;
 	unsigned char const com_number_uchar = com_number;
-	int const print_ret = std::swprintf(buff, std::size(buff), LR"---(\\.\COM%hhd)---", com_number_uchar);
+	int const print_ret = std::swprintf(buff.data(), buff.size(), LR"---(\\.\COM%hhd)---", com_number_uchar);
 	VERIFY(print_ret > 0);
 
-	HANDLE const handle = CreateFileW(buff, GENERIC_READ | GENERIC_WRITE, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	HANDLE const handle = CreateFileW(buff.data(), GENERIC_READ | GENERIC_WRITE, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 	VERIFY(handle != INVALID_HANDLE_VALUE);
 	m_handle = handle;
 
@@ -60,6 +61,7 @@ com_port::com_port(std::uint8_t const& com_number) :
 	VERIFY(escape_ret1 != 0);
   BOOL const escape_ret2 = EscapeCommFunction(m_handle, CLRDTR);
 	VERIFY(escape_ret2 != 0);
+#endif
 }
 
 com_port::~com_port()
@@ -71,16 +73,17 @@ com_port::~com_port()
 	}
 }
 
-comm_response_packet com_port::read_flash_block(address24_t const& address)
+comm_response_packet com_port::read_flash_block(address24_t const& /*address*/)
 {
+#if 0
 	std::array<std::uint8_t, 6> command;
 	command[0] = s_comm_SFMARK;
 	command[1] = s_comm_command_read_flash;
 	command[2] = address.m_data[0];
 	command[3] = address.m_data[1];
 	command[4] = address.m_data[2];
-	command[5] = ~std::accumulate(cbegin(command) + 1, cend(command) - 1, std::uint8_t{0});
-	write(command.data(), command.size());
+	command[5] = ~std::accumulate(cbegin(command) + 1, cend(command) - 1, static_cast<std::uint8_t>(0));
+	write(command.data(), static_cast<std::uint32_t>(command.size()));
 
 	comm_response_packet packet;
 	read(reinterpret_cast<std::uint8_t*>(std::addressof(packet)), sizeof(packet));
@@ -88,31 +91,35 @@ comm_response_packet com_port::read_flash_block(address24_t const& address)
 	VERIFY(packet.m_header[1] == s_comm_response_read_flash);
 	VERIFY(packet.m_header[2] == sizeof(packet.m_payload));
 	auto const packet_cbegin = reinterpret_cast<std::uint8_t const*>(std::addressof(packet));
-	std::uint8_t const response_checksum = std::accumulate(packet_cbegin + 1, packet_cbegin + sizeof(packet), std::uint8_t{0});
+	std::uint8_t const response_checksum = std::accumulate(packet_cbegin + 1, packet_cbegin + sizeof(packet), static_cast<std::uint8_t>(0));
 	VERIFY(response_checksum == 0xFF);
 	return packet;
+#endif
+	return {};
 }
 
-void com_port::write_flash_block(address24_t const& addr, comm_write_packet& packet, std::uint8_t const& bytes_to_write)
+void com_port::write_flash_block(address24_t const& /*addr*/, comm_write_packet& /*packet*/, std::uint8_t const& /*bytes_to_write*/)
 {
+#if 0
 	packet.m_header[0] = s_comm_SFMARK;
 	packet.m_header[1] = s_comm_command_write_flash;
 	packet.m_header[2] = bytes_to_write;
 	packet.m_header[3] = addr.m_data[0];
 	packet.m_header[4] = addr.m_data[1];
 	packet.m_header[5] = addr.m_data[2];
-	packet.m_footer[0] = ~(std::accumulate(cbegin(packet.m_header) + 1, cend(packet.m_header), std::uint8_t{0}) + std::accumulate(cbegin(packet.m_payload), cend(packet.m_payload), std::uint8_t{0}));
+	packet.m_footer[0] = ~(std::accumulate(cbegin(packet.m_header) + 1, cend(packet.m_header), static_cast<std::uint8_t>(0)) + std::accumulate(cbegin(packet.m_payload), cend(packet.m_payload), static_cast<std::uint8_t>(0)));
 	write(reinterpret_cast<std::uint8_t const*>(std::addressof(packet)), sizeof(packet));
 
 #pragma warning(push)
 #pragma warning(disable:6001) // Using uninitialized memory.
 	std::array<std::uint8_t, 3> response;
-	read(response.data(), response.size());
+	read(response.data(), static_cast<std::uint32_t>(response.size()));
 #pragma warning(pop)
 	VERIFY(response[0] == s_comm_SFMARK);
 	VERIFY(response[1] == s_comm_response_write_flash);
-	std::uint8_t const response_checksum = std::accumulate(cbegin(response) + 1, cend(response), std::uint8_t{0});
+	std::uint8_t const response_checksum = std::accumulate(cbegin(response) + 1, cend(response), static_cast<std::uint8_t>(0));
 	VERIFY(response_checksum == 0xFF);
+#endif
 }
 
 void com_port::read(std::uint8_t* const& data, int const& len)
@@ -120,7 +127,7 @@ void com_port::read(std::uint8_t* const& data, int const& len)
 	DWORD bytes_read;
 	BOOL const read_ret = ReadFile(m_handle, data, len, &bytes_read, nullptr);
 	VERIFY(read_ret != 0);
-	VERIFY(bytes_read == len);
+	//VERIFY(bytes_read == len);
 }
 
 void com_port::write(std::uint8_t const* const& data, int const& len)
@@ -128,16 +135,17 @@ void com_port::write(std::uint8_t const* const& data, int const& len)
 	DWORD bytes_written;
 	BOOL const write_ret = WriteFile(m_handle, data, len, &bytes_written, nullptr);
 	VERIFY(write_ret != 0);
-	VERIFY(bytes_written == len);
+	//VERIFY(bytes_written == len);
 }
 
 void com_port::erase_flash()
 {
+#if 0
 	std::array<std::uint8_t, 3> command;
 	command[0] = s_comm_SFMARK;
 	command[1] = s_comm_command_erase_flash;
-	command[2] = ~std::accumulate(cbegin(command) + 1, cend(command) - 1, std::uint8_t{0});
-	write(command.data(), command.size());
+	command[2] = ~std::accumulate(cbegin(command) + 1, cend(command) - 1, static_cast<std::uint8_t>(0));
+	write(command.data(), static_cast<std::uint32_t>(command.size()));
 
 	COMMTIMEOUTS timeouts1{};
 	timeouts1.ReadIntervalTimeout = 0;
@@ -151,12 +159,12 @@ void com_port::erase_flash()
 #pragma warning(push)
 #pragma warning(disable:6001) // Using uninitialized memory.
 	std::array<std::uint8_t, 3> packet;
-	read(packet.data(), packet.size());
+	read(packet.data(), static_cast<std::uint32_t>(packet.size()));
 #pragma warning(pop)
 	VERIFY(packet[0] == s_comm_SFMARK);
 	VERIFY(packet[1] == s_comm_response_erase_flash);
 	auto const packet_cbegin = reinterpret_cast<std::uint8_t const*>(std::addressof(packet));
-	std::uint8_t const response_checksum = std::accumulate(packet_cbegin + 1, packet_cbegin + sizeof(packet), std::uint8_t{0});
+	std::uint8_t const response_checksum = std::accumulate(packet_cbegin + 1, packet_cbegin + sizeof(packet), static_cast<std::uint8_t>(0));
 	VERIFY(response_checksum == 0xFF);
 
 	COMMTIMEOUTS timeouts2{};
@@ -167,4 +175,5 @@ void com_port::erase_flash()
 	timeouts2.WriteTotalTimeoutConstant = 200;
 	BOOL const timeouts_ret2 = SetCommTimeouts(m_handle, &timeouts2);
 	VERIFY(timeouts_ret2 != 0);
+#endif
 }

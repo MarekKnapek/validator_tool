@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E101E7E0-86B1-4AFA-A721-AF9D362EBF32}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>ValidatorUtil</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <CodeAnalysisRuleSet>C:\Program Files (x86)\Microsoft Visual Studio 14.0\Team Tools\Static Analysis Tools\Rule Sets\NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <CodeAnalysisRuleSet>C:\Program Files (x86)\Microsoft Visual Studio 14.0\Team Tools\Static Analysis Tools\Rule Sets\NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <CodeAnalysisRuleSet>C:\Program Files (x86)\Microsoft Visual Studio 14.0\Team Tools\Static Analysis Tools\Rule Sets\NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <CodeAnalysisRuleSet>C:\Program Files (x86)\Microsoft Visual Studio 14.0\Team Tools\Static Analysis Tools\Rule Sets\NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>TYPE_ERASER_WANT_TESTS;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <EnablePREfast>false</EnablePREfast>
+      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <Profile>false</Profile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>TYPE_ERASER_WANT_TESTS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <EnablePREfast>false</EnablePREfast>
+      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <Profile>false</Profile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>TYPE_ERASER_WANT_TESTS;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <EnablePREfast>false</EnablePREfast>
+      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <Profile>false</Profile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>TYPE_ERASER_WANT_TESTS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <EnablePREfast>false</EnablePREfast>
+      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <Profile>false</Profile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\commands\bin2hex.cpp" />
+    <ClCompile Include="src\commands\bin2hex_impl.cpp" />
+    <ClCompile Include="src\commands\bin2txt.cpp" />
+    <ClCompile Include="src\commands\bin2txt_impl.cpp" />
+    <ClCompile Include="src\commands\hex2bin.cpp" />
+    <ClCompile Include="src\commands\hex2bin_impl.cpp" />
+    <ClCompile Include="src\com_port.cpp" />
+    <ClCompile Include="src\hw2bin.cpp" />
+    <ClCompile Include="src\hw2hex.cpp" />
+    <ClCompile Include="src\IO.cpp" />
+    <ClCompile Include="src\io\buffered_writer.cpp" />
+    <ClCompile Include="src\io\line_view.cpp" />
+    <ClCompile Include="src\io\memory_writer.cpp" />
+    <ClCompile Include="src\io\txt_writer.cpp" />
+    <ClCompile Include="src\io\windows_file.cpp" />
+    <ClCompile Include="src\io\windows_file_reader.cpp" />
+    <ClCompile Include="src\io\windows_file_writer.cpp" />
+    <ClCompile Include="src\io\writer.cpp" />
+    <ClCompile Include="src\progress.cpp" />
+    <ClCompile Include="src\tests\fake_byte_reader.cpp" />
+    <ClCompile Include="src\tests\line_reader_tests.cpp" />
+    <ClCompile Include="src\tests\tests.cpp" />
+    <ClCompile Include="src\tests\type_eraser_tests.cpp" />
+    <ClCompile Include="src\tests\type_eraser_tests_1.cpp" />
+    <ClCompile Include="src\tests\type_eraser_tests_2.cpp" />
+    <ClCompile Include="src\tests\type_eraser_tests_3.cpp" />
+    <ClCompile Include="src\tests\type_eraser_tests_4.cpp" />
+    <ClCompile Include="src\tests\type_eraser_tests_5.cpp" />
+    <ClCompile Include="src\tests\type_eraser_tests_6.cpp" />
+    <ClCompile Include="src\tests\type_eraser_tests_move.cpp" />
+    <ClCompile Include="src\tests\writer_tests.cpp" />
+    <ClCompile Include="src\txt2bin.cpp" />
+    <ClCompile Include="src\txt2bin_impl.cpp" />
+    <ClCompile Include="src\Utils.cpp" />
+    <ClCompile Include="src\utils\aligned_alloc.cpp" />
+    <ClCompile Include="src\utils\convert.cpp" />
+    <ClCompile Include="src\utils\verify.cpp" />
+    <ClCompile Include="src\utils\windows_memory.cpp" />
+    <ClCompile Include="src\ValidatorUtil.cpp" />
+    <ClCompile Include="src\validator_tool_unity.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\algorithm\copy.h" />
+    <ClInclude Include="src\commands\bin2hex.h" />
+    <ClInclude Include="src\commands\bin2hex_impl.h" />
+    <ClInclude Include="src\commands\bin2txt.h" />
+    <ClInclude Include="src\commands\bin2txt_impl.h" />
+    <ClInclude Include="src\commands\hex2bin.h" />
+    <ClInclude Include="src\commands\hex2bin_impl.h" />
+    <ClInclude Include="src\comm_response_packet.h" />
+    <ClInclude Include="src\comm_response_packet_fwd.h" />
+    <ClInclude Include="src\comm_write_packet.h" />
+    <ClInclude Include="src\comm_write_packet_fwd.h" />
+    <ClInclude Include="src\com_port.h" />
+    <ClInclude Include="src\hw2bin.h" />
+    <ClInclude Include="src\hw2hex.h" />
+    <ClInclude Include="src\IO.h" />
+    <ClInclude Include="src\io\buffered_reader.h" />
+    <ClInclude Include="src\io\buffered_writer.h" />
+    <ClInclude Include="src\io\line_reader.h" />
+    <ClInclude Include="src\io\line_view.h" />
+    <ClInclude Include="src\io\line_view_fwd.h" />
+    <ClInclude Include="src\io\memory_writer.h" />
+    <ClInclude Include="src\io\srec_reader.h" />
+    <ClInclude Include="src\io\srec_writer.h" />
+    <ClInclude Include="src\io\txt_writer.h" />
+    <ClInclude Include="src\io\windows_file.h" />
+    <ClInclude Include="src\io\windows_file_reader.h" />
+    <ClInclude Include="src\io\windows_file_writer.h" />
+    <ClInclude Include="src\io\writer.h" />
+    <ClInclude Include="src\progress.h" />
+    <ClInclude Include="src\progress_consumer.h" />
+    <ClInclude Include="src\tests\fake_byte_reader.h" />
+    <ClInclude Include="src\tests\line_reader_tests.h" />
+    <ClInclude Include="src\tests\tests.h" />
+    <ClInclude Include="src\tests\type_eraser_tests.h" />
+    <ClInclude Include="src\tests\type_eraser_tests_1.h" />
+    <ClInclude Include="src\tests\type_eraser_tests_2.h" />
+    <ClInclude Include="src\tests\type_eraser_tests_3.h" />
+    <ClInclude Include="src\tests\type_eraser_tests_4.h" />
+    <ClInclude Include="src\tests\type_eraser_tests_5.h" />
+    <ClInclude Include="src\tests\type_eraser_tests_6.h" />
+    <ClInclude Include="src\tests\type_eraser_tests_move.h" />
+    <ClInclude Include="src\tests\writer_tests.h" />
+    <ClInclude Include="src\txt2bin.h" />
+    <ClInclude Include="src\txt2bin_impl.h" />
+    <ClInclude Include="src\Utils.h" />
+    <ClInclude Include="src\utils\aligned_alloc.h" />
+    <ClInclude Include="src\utils\checked_iterator.h" />
+    <ClInclude Include="src\utils\convert.h" />
+    <ClInclude Include="src\utils\scope_exit.h" />
+    <ClInclude Include="src\utils\type_eraser.h" />
+    <ClInclude Include="src\utils\type_traits.h" />
+    <ClInclude Include="src\utils\verify.h" />
+    <ClInclude Include="src\utils\windows_memory.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\algorithm\copy.inl" />
+    <None Include="src\build_all.bat" />
+    <None Include="src\io\buffered_reader.inl" />
+    <None Include="src\io\line_reader.inl" />
+    <None Include="src\io\srec_reader.inl" />
+    <None Include="src\io\srec_writer.inl" />
+    <None Include="src\io\writer.inl" />
+    <None Include="src\progress.inl" />
+    <None Include="src\utils\checked_iterator.inl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

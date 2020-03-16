@@ -1,0 +1,335 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{35f1c1e0-6ae4-47f5-8aaa-dad1735c9ae1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\io">
+      <UniqueIdentifier>{ac4a0aec-bafe-4692-b096-fa174796231b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\utils">
+      <UniqueIdentifier>{d3ef3f11-380e-423d-ae52-f367b8e3d816}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\tests">
+      <UniqueIdentifier>{18f79ea2-6f96-49ac-90a7-74b4be486545}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\commands">
+      <UniqueIdentifier>{5673cb54-8124-48a8-b593-c026a9755b5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\algorithm">
+      <UniqueIdentifier>{89996d6e-552d-4e25-907d-9e9cfa39d64e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\ValidatorUtil.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IO.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\txt2bin.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\txt2bin_impl.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\com_port.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hw2bin.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\progress.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hw2hex.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\verify.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\convert.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\line_view.cpp">
+      <Filter>src\io</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\fake_byte_reader.cpp">
+      <Filter>src\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\line_reader_tests.cpp">
+      <Filter>src\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\tests.cpp">
+      <Filter>src\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\commands\bin2hex.cpp">
+      <Filter>src\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="src\commands\bin2hex_impl.cpp">
+      <Filter>src\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="src\commands\hex2bin.cpp">
+      <Filter>src\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="src\commands\hex2bin_impl.cpp">
+      <Filter>src\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="src\commands\bin2txt.cpp">
+      <Filter>src\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="src\commands\bin2txt_impl.cpp">
+      <Filter>src\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\windows_file.cpp">
+      <Filter>src\io</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\txt_writer.cpp">
+      <Filter>src\io</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\aligned_alloc.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\windows_memory.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\buffered_writer.cpp">
+      <Filter>src\io</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\writer_tests.cpp">
+      <Filter>src\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\validator_tool_unity.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\type_eraser_tests.cpp">
+      <Filter>src\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\type_eraser_tests_1.cpp">
+      <Filter>src\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\type_eraser_tests_2.cpp">
+      <Filter>src\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\type_eraser_tests_3.cpp">
+      <Filter>src\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\type_eraser_tests_4.cpp">
+      <Filter>src\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\type_eraser_tests_5.cpp">
+      <Filter>src\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\type_eraser_tests_6.cpp">
+      <Filter>src\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\type_eraser_tests_move.cpp">
+      <Filter>src\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\windows_file_writer.cpp">
+      <Filter>src\io</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\windows_file_reader.cpp">
+      <Filter>src\io</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\memory_writer.cpp">
+      <Filter>src\io</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\writer.cpp">
+      <Filter>src\io</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Utils.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IO.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\txt2bin.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\txt2bin_impl.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\com_port.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\comm_response_packet.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\comm_response_packet_fwd.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\hw2bin.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\progress.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\progress_consumer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\comm_write_packet.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\comm_write_packet_fwd.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\hw2hex.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\buffered_writer.h">
+      <Filter>src\io</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\line_reader.h">
+      <Filter>src\io</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\line_view.h">
+      <Filter>src\io</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\line_view_fwd.h">
+      <Filter>src\io</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\srec_writer.h">
+      <Filter>src\io</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\verify.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\convert.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\scope_exit.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\fake_byte_reader.h">
+      <Filter>src\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\checked_iterator.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\line_reader_tests.h">
+      <Filter>src\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\tests.h">
+      <Filter>src\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="src\commands\bin2hex.h">
+      <Filter>src\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="src\commands\bin2hex_impl.h">
+      <Filter>src\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="src\commands\hex2bin.h">
+      <Filter>src\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="src\commands\hex2bin_impl.h">
+      <Filter>src\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\srec_reader.h">
+      <Filter>src\io</Filter>
+    </ClInclude>
+    <ClInclude Include="src\commands\bin2txt.h">
+      <Filter>src\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="src\commands\bin2txt_impl.h">
+      <Filter>src\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\windows_file.h">
+      <Filter>src\io</Filter>
+    </ClInclude>
+    <ClInclude Include="src\algorithm\copy.h">
+      <Filter>src\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\buffered_reader.h">
+      <Filter>src\io</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\txt_writer.h">
+      <Filter>src\io</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\aligned_alloc.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\type_traits.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\windows_memory.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\writer_tests.h">
+      <Filter>src\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\type_eraser.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\type_eraser_tests.h">
+      <Filter>src\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\type_eraser_tests_1.h">
+      <Filter>src\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\type_eraser_tests_2.h">
+      <Filter>src\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\type_eraser_tests_3.h">
+      <Filter>src\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\type_eraser_tests_4.h">
+      <Filter>src\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\type_eraser_tests_5.h">
+      <Filter>src\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\type_eraser_tests_6.h">
+      <Filter>src\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\type_eraser_tests_move.h">
+      <Filter>src\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\windows_file_writer.h">
+      <Filter>src\io</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\windows_file_reader.h">
+      <Filter>src\io</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\memory_writer.h">
+      <Filter>src\io</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\writer.h">
+      <Filter>src\io</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\progress.inl">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\io\line_reader.inl">
+      <Filter>src\io</Filter>
+    </None>
+    <None Include="src\io\srec_writer.inl">
+      <Filter>src\io</Filter>
+    </None>
+    <None Include="src\utils\checked_iterator.inl">
+      <Filter>src\utils</Filter>
+    </None>
+    <None Include="src\io\srec_reader.inl">
+      <Filter>src\io</Filter>
+    </None>
+    <None Include="src\algorithm\copy.inl">
+      <Filter>src\algorithm</Filter>
+    </None>
+    <None Include="src\io\buffered_reader.inl">
+      <Filter>src\io</Filter>
+    </None>
+    <None Include="src\build_all.bat">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\io\writer.inl">
+      <Filter>src\io</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -26,10 +26,9 @@ static std::uint8_t const s_comm_response_write_flash = s_comm_command_write_fla
 static std::uint8_t const s_comm_response_erase_flash = s_comm_command_erase_flash | 0x80;
 
 
-com_port::com_port(std::uint8_t const& /*com_number*/) :
+com_port::com_port(std::uint8_t const& com_number) :
 	m_handle()
 {
-#if 0
 	std::array<wchar_t, 256> buff;
 	unsigned char const com_number_uchar = com_number;
 	int const print_ret = std::swprintf(buff.data(), buff.size(), LR"---(\\.\COM%hhd)---", com_number_uchar);
@@ -61,7 +60,6 @@ com_port::com_port(std::uint8_t const& /*com_number*/) :
 	VERIFY(escape_ret1 != 0);
   BOOL const escape_ret2 = EscapeCommFunction(m_handle, CLRDTR);
 	VERIFY(escape_ret2 != 0);
-#endif
 }
 
 com_port::~com_port()
@@ -73,9 +71,8 @@ com_port::~com_port()
 	}
 }
 
-comm_response_packet com_port::read_flash_block(address24_t const& /*address*/)
+comm_response_packet com_port::read_flash_block(address24_t const& address)
 {
-#if 0
 	std::array<std::uint8_t, 6> command;
 	command[0] = s_comm_SFMARK;
 	command[1] = s_comm_command_read_flash;
@@ -94,13 +91,10 @@ comm_response_packet com_port::read_flash_block(address24_t const& /*address*/)
 	std::uint8_t const response_checksum = std::accumulate(packet_cbegin + 1, packet_cbegin + sizeof(packet), static_cast<std::uint8_t>(0));
 	VERIFY(response_checksum == 0xFF);
 	return packet;
-#endif
-	return {};
 }
 
-void com_port::write_flash_block(address24_t const& /*addr*/, comm_write_packet& /*packet*/, std::uint8_t const& /*bytes_to_write*/)
+void com_port::write_flash_block(address24_t const& addr, comm_write_packet& packet, std::uint8_t const& bytes_to_write)
 {
-#if 0
 	packet.m_header[0] = s_comm_SFMARK;
 	packet.m_header[1] = s_comm_command_write_flash;
 	packet.m_header[2] = bytes_to_write;
@@ -119,7 +113,6 @@ void com_port::write_flash_block(address24_t const& /*addr*/, comm_write_packet&
 	VERIFY(response[1] == s_comm_response_write_flash);
 	std::uint8_t const response_checksum = std::accumulate(cbegin(response) + 1, cend(response), static_cast<std::uint8_t>(0));
 	VERIFY(response_checksum == 0xFF);
-#endif
 }
 
 void com_port::read(std::uint8_t* const& data, int const& len)
@@ -127,7 +120,7 @@ void com_port::read(std::uint8_t* const& data, int const& len)
 	DWORD bytes_read;
 	BOOL const read_ret = ReadFile(m_handle, data, len, &bytes_read, nullptr);
 	VERIFY(read_ret != 0);
-	//VERIFY(bytes_read == len);
+	VERIFY(bytes_read == len);
 }
 
 void com_port::write(std::uint8_t const* const& data, int const& len)
@@ -135,12 +128,11 @@ void com_port::write(std::uint8_t const* const& data, int const& len)
 	DWORD bytes_written;
 	BOOL const write_ret = WriteFile(m_handle, data, len, &bytes_written, nullptr);
 	VERIFY(write_ret != 0);
-	//VERIFY(bytes_written == len);
+	VERIFY(bytes_written == len);
 }
 
 void com_port::erase_flash()
 {
-#if 0
 	std::array<std::uint8_t, 3> command;
 	command[0] = s_comm_SFMARK;
 	command[1] = s_comm_command_erase_flash;
@@ -175,5 +167,4 @@ void com_port::erase_flash()
 	timeouts2.WriteTotalTimeoutConstant = 200;
 	BOOL const timeouts_ret2 = SetCommTimeouts(m_handle, &timeouts2);
 	VERIFY(timeouts_ret2 != 0);
-#endif
 }

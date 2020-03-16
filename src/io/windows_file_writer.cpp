@@ -71,6 +71,10 @@ void windows_file_writer::write_bytes(std::uint8_t const* const& buffer, std::ui
 {
 	DWORD size_written;
 	BOOL const ret = WriteFile(m_handle, buffer, size, &size_written, nullptr);
+	if(ret == 0)
+	{
+		return;
+	}
 	VERIFY(ret != 0);
 	VERIFY(size_written == size);
 }

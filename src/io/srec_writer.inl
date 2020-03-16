@@ -47,7 +47,6 @@ srec_writer<T>::~srec_writer()
 template<typename T>
 void srec_writer<T>::write_line()
 {
-#if 0
 	VERIFY(m_idx <= s_srec_writer_bytes_per_line);
 	std::array<std::uint8_t, 2 + 1 * 2 + 3 * 2 + s_srec_writer_bytes_per_line * 2 + 1 * 2 + 2> buff;
 	buff[0] = 'S';
@@ -79,7 +78,6 @@ void srec_writer<T>::write_line()
 	m_byte_writer.write_bytes(buff.data(), 2 + 1 * 2 + 3 * 2 + m_idx * 2 + 1 * 2 + 2);
 	m_addr += m_idx;
 	m_idx = 0;
-#endif
 }
 
 

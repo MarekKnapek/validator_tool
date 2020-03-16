@@ -5,6 +5,7 @@
 #include "comm_response_packet.h"
 #include "io/windows_file_writer.h"
 #include "io/buffered_writer.h"
+#include "io/windows_file.h"
 #include "utils/verify.h"
 
 #include <windows.h>
@@ -45,15 +46,8 @@ int hw2bin_impl(std::uint8_t const& com_port_number, wchar_t const* const& file_
 
 	com_port com{com_port_number};
 
-	HANDLE const file_handle = CreateFileW(file_name, GENERIC_WRITE, FILE_SHARE_READ, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
-	VERIFY(file_handle != INVALID_HANDLE_VALUE);
-	auto fn_close_file = mk::make_scope_exit([&]()
-	{
-		BOOL const close_ret = CloseHandle(file_handle);
-		VERIFY(close_ret != 0);
-	});
-
-	windows_file_writer wfbw(file_handle);
+	windows_file wf = windows_file::make_for_output_redirectable(file_name);
+	windows_file_writer wfbw(wf.get_handle());
 	auto wrtr = buffered_writer(writer(std::ref(wfbw)));
 
 	unsigned addr_old = 0;

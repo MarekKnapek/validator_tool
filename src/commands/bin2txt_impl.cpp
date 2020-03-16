@@ -14,7 +14,7 @@
 
 #include <windows.h>
 
-#if 0
+
 using digital_io = fluent::NamedType<std::uint8_t, struct digital_io_tag, fluent::Comparable>;
 
 using volts_10 = fluent::NamedType<double, struct volts_10_tag>;
@@ -121,8 +121,8 @@ volts_01 convert_to_volts_01(volts_01 const& v)
 	return volts_01((s_volts_01_nominal / s_volts_01_nominal) * v.get());
 }
 
-double round_to_nearest_ties_to_even(double const& d);
-double round_to_nearest_ties_to_even(double const& d)
+double round_to_nearest_ties_to_even_2(double const& d);
+double round_to_nearest_ties_to_even_2(double const& d)
 {
   return d - std::remainder(d, 1.0);
 }
@@ -138,7 +138,7 @@ std::uint8_t control_byte(erange const& range, erate const& rate, std::uint8_t c
 
 volts_b convert_to_volts_b(volts_10 const& v)
 {
-	std::uint32_t bits = static_cast<std::uint32_t>((std::min)(s_d20bits, round_to_nearest_ties_to_even((s_d20bits / s_max10volts) * std::abs(v.get()))));
+	std::uint32_t bits = static_cast<std::uint32_t>((std::min)(s_d20bits, round_to_nearest_ties_to_even_2((s_d20bits / s_max10volts) * std::abs(v.get()))));
 	if(v.get() < 0.0)
 	{
 		bits |= s_minus_bit;
@@ -186,6 +186,7 @@ bool process_sample(sample const& s, erange& current_range, erate& current_rate,
 		auto const new_dio = static_cast<digital_io>((s[0] >> 0) & 0x0F);
 		auto const new_range = static_cast<erange>  ((s[0] >> 4) & 0x03);
 		auto const new_rate = static_cast<erate>    ((s[0] >> 6) & 0x03);
+		/*
 		VERIFY
 		(
 			(new_dio == current_dio && new_range == current_range && new_rate == current_rate) ||
@@ -193,6 +194,7 @@ bool process_sample(sample const& s, erange& current_range, erate& current_rate,
 			(new_dio == current_dio && new_range != current_range && new_rate == current_rate) ||
 			(new_dio == current_dio && new_range == current_range && new_rate != current_rate)
 		);
+		*/
 		if(new_dio != current_dio)
 		{
 			current_dio = new_dio;
@@ -200,7 +202,7 @@ bool process_sample(sample const& s, erange& current_range, erate& current_rate,
 			std::snprintf(const_cast<char*>(out.data()), 6, "D%hhu\x0D\x0A", new_dio.get());
 			return true;
 		}
-		else if(new_range != current_range)
+		if(new_range != current_range)
 		{
 			current_range = new_range;
 			switch(current_range)
@@ -211,7 +213,7 @@ bool process_sample(sample const& s, erange& current_range, erate& current_rate,
 			}
 			VERIFY(false);
 		}
-		else if(new_rate != current_rate)
+		if(new_rate != current_rate)
 		{
 			current_rate = new_rate;
 			switch(current_rate)
@@ -223,9 +225,8 @@ bool process_sample(sample const& s, erange& current_range, erate& current_rate,
 			}
 			VERIFY(false);
 		}
-		else
 		{
-			VERIFY(new_dio == current_dio && new_range == current_range && new_rate == current_rate);
+			//VERIFY(new_dio == current_dio && new_range == current_range && new_rate == current_rate);
 			current_dio = new_dio;
 			out.resize(6);
 			std::snprintf(const_cast<char*>(out.data()), 6, "D%hhu\x0D\x0A", new_dio.get());
@@ -424,7 +425,6 @@ int Bin2Txt()
 
 	return 0;
 }
-#endif
 
 
 
@@ -467,6 +467,7 @@ int bin2txt_impl(wchar_t const* const& input_file_name, wchar_t const* const& ou
 	auto e = writer{std::ref(std::ref(bw))};
 	e.write_bytes(nullptr, 0);
 #endif
+#if 0
 	(void)input_file_name;
 	(void)output_bank1_file_name;
 	(void)output_bank2_file_name;
@@ -479,6 +480,8 @@ int bin2txt_impl(wchar_t const* const& input_file_name, wchar_t const* const& ou
 
 	writer w{std::ref(bw)};
 	w.write_bytes(nullptr, 0);
+#endif
+	Bin2Txt();
 	return EXIT_SUCCESS;
 }
 

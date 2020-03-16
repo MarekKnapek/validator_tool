@@ -1,7 +1,5 @@
 #include "txt2bin_impl.h"
-#if 0
 #include "utils/verify.h"
-#include "io/writer1.h"
 #include "Utils.h" // VERIFY
 #include "utils/scope_exit.h" // CswMakeScopeExit
 #include "io/line_reader.h"
@@ -126,13 +124,13 @@ int txt2bin_impl(wchar_t const* const& block1_file_name, wchar_t const* const& b
 		{block4_file_handle, s_block4start, s_block4end},
 	};
 
-	windows_file_byte_writer byte_writer(eeprom_file_handle);
+	windows_file_writer byte_writer(eeprom_file_handle);
 	auto wrtr = buffered_writer(writer(std::ref(byte_writer)));
 	std::uint32_t address = 0;
 	for(auto const& block : blocks)
 	{
 		VERIFY(address == block.start_addr);
-		windows_file_byte_reader file_byte_reader(block.m_handle);
+		windows_file_reader file_byte_reader(block.m_handle);
 		auto file_line_reader = make_line_reader(file_byte_reader);
 		line_view file_line;
 		erange current_range = s_default_range;
@@ -169,7 +167,7 @@ int txt2bin_impl(wchar_t const* const& block1_file_name, wchar_t const* const& b
 		VERIFY(address == block.end_addr);
 	}
 
-	windows_file_byte_reader cal_file_byte_reader(cal_file_handle);
+	windows_file_reader cal_file_byte_reader(cal_file_handle);
 	auto cal_file_line_reader = make_line_reader(cal_file_byte_reader);
 	line_view file_line;
 	int cal_lines = 0;
@@ -318,14 +316,14 @@ volts_10 convert_to_10_volts(double const& value, erange const& type)
 	return volts_10{(s_volts_10_nominal / s_volts_conversion_table[static_cast<std::uint8_t>(type)]) * value};
 }
 
-double round_to_nearest_ties_to_even(double const& d)
+double round_to_nearest_ties_to_even_1(double const& d)
 {
   return d - std::remainder(d, 1.0);
 }
 
 std::array<std::uint8_t, 3> convert_to_volts_binary(volts_10 const& v)
 {
-	std::uint32_t bits = static_cast<std::uint32_t>((std::min)(s_20bits_as_double, round_to_nearest_ties_to_even((s_20bits_as_double / s_max10volts) * std::abs(v.get()))));
+	std::uint32_t bits = static_cast<std::uint32_t>((std::min)(s_20bits_as_double, round_to_nearest_ties_to_even_1((s_20bits_as_double / s_max10volts) * std::abs(v.get()))));
 	if(v.get() < 0.0)
 	{
 		bits |= s_minus_bit;
@@ -338,5 +336,3 @@ std::array<std::uint8_t, 3> convert_to_volts_binary(volts_10 const& v)
 		(bits >> 16) & 0xFFu
 	};
 }
-
-#endif

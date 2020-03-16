@@ -14,6 +14,10 @@ std::uint32_t windows_file_reader::read_bytes(std::uint8_t* const& buffer, std::
 {
 	DWORD size_read;
 	BOOL const ret = ReadFile(m_handle, buffer, size, &size_read, nullptr);
+	if(ret == 0)
+	{
+		return 0;
+	}
 	VERIFY(ret != 0);
 	return size_read;
 }

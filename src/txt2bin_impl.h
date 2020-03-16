@@ -1,5 +1,4 @@
 #pragma once
-#if 0
 #ifndef txt2bin_impl_h_included
 #define txt2bin_impl_h_included
 
@@ -36,9 +35,8 @@ int txt2bin_impl(wchar_t const* const& block1_file_name, wchar_t const* const& b
 bool create_sample(line_view const& file_line, std::array<std::uint8_t, 3>& sample, erange& current_range, erate& current_rate, digital_io& current_dio);
 std::uint8_t control_byte(erange const& range, erate const& rate, digital_io const& dio);
 volts_10 convert_to_10_volts(double const& value, erange const& type);
-double round_to_nearest_ties_to_even(double const& d);
+double round_to_nearest_ties_to_even_1(double const& d);
 std::array<std::uint8_t, 3> convert_to_volts_binary(volts_10 const& v);
 
 
-#endif
 #endif

@@ -22,7 +22,7 @@ static command const s_commands[] =
 {
 	{s_command_bin2hex, &bin2hex},
 	{s_command_bin2txt, &bin2txt},
-
+	{s_command_txt2bin, &txt2bin},
 	{s_command_hex2bin, &hex2bin},
 	{s_command_hw2bin, &hw2bin},
 	{s_command_hw2hex, &hw2hex},

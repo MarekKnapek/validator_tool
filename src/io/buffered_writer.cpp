@@ -16,7 +16,7 @@ namespace
 
 
 buffered_writer::buffered_writer() noexcept :
-	m_byte_writer(),
+	m_writer(),
 	m_buffer(),
 	m_idx()
 {
@@ -39,20 +39,20 @@ buffered_writer::~buffered_writer()
 {
 	if(m_idx != 0)
 	{
-		m_byte_writer.write_bytes(m_buffer.get(), m_idx);
+		m_writer.write_bytes(m_buffer.get(), m_idx);
 	}
 }
 
 void buffered_writer::swap(buffered_writer& other) noexcept
 {
 	using std::swap;
-	swap(this->m_byte_writer, other.m_byte_writer);
+	swap(this->m_writer, other.m_writer);
 	swap(this->m_buffer, other.m_buffer);
 	swap(this->m_idx, other.m_idx);
 }
 
 buffered_writer::buffered_writer(writer&& byte_writer) :
-	m_byte_writer(std::move(byte_writer)),
+	m_writer(std::move(byte_writer)),
 	m_buffer(),
 	m_idx()
 {
@@ -60,13 +60,13 @@ buffered_writer::buffered_writer(writer&& byte_writer) :
 
 writer& buffered_writer::get()
 {
-	return m_byte_writer;
+	return m_writer;
 	// unit tests and debug only
 }
 
 writer const& buffered_writer::get() const
 {
-	return m_byte_writer;
+	return m_writer;
 	// unit tests and debug only
 }
 
@@ -87,7 +87,7 @@ void buffered_writer::write_bytes_nocheck(std::uint8_t const* const& buffer, std
 	m_idx += size1;
 	if(m_idx == g_buffered_writer_buffer_size)
 	{
-		m_byte_writer.write_bytes(m_buffer.get(), g_buffered_writer_buffer_size);
+		m_writer.write_bytes(m_buffer.get(), g_buffered_writer_buffer_size);
 		m_idx = 0;
 		return write_bytes(buffer + size1, size2);
 	}

@@ -3,22 +3,24 @@
 
 #include "type_eraser_tests.h"
 
-#include "type_eraser_tests1.h"
-#include "type_eraser_tests2.h"
-#include "type_eraser_tests3.h"
-#include "type_eraser_tests4.h"
-#include "type_eraser_tests5.h"
-#include "type_eraser_tests6.h"
+#include "type_eraser_tests_1.h"
+#include "type_eraser_tests_2.h"
+#include "type_eraser_tests_3.h"
+#include "type_eraser_tests_4.h"
+#include "type_eraser_tests_5.h"
+#include "type_eraser_tests_6.h"
+#include "type_eraser_tests_move.h"
 
 
 void type_eraser_tests()
 {
-	type_eraser_tests1();
-	type_eraser_tests2();
-	type_eraser_tests3();
-	type_eraser_tests4();
-	type_eraser_tests5();
-	type_eraser_tests6();
+	type_eraser_tests_1();
+	type_eraser_tests_2();
+	type_eraser_tests_3();
+	type_eraser_tests_4();
+	type_eraser_tests_5();
+	type_eraser_tests_6();
+	type_eraser_tests_move();
 }
 
 

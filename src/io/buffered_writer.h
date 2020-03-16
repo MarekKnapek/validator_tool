@@ -29,7 +29,7 @@ public:
 private:
 	void write_bytes_nocheck(std::uint8_t const* const& buffer, std::uint32_t const& size);
 private:
-	writer m_byte_writer;
+	writer m_writer;
 	std::unique_ptr<std::uint8_t, virtual_free_deleter> m_buffer;
 	std::uint32_t m_idx;
 };

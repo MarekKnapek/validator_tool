@@ -3,11 +3,10 @@
 #define writer_h_included
 
 
-#include "writer_wrapper_base.h" // writer_wrapper_base
-#include "../utils/type_traits.h" // is_writer_trait is_writer_v
+#include "../utils/type_eraser.h" // type_eraser
+#include "../utils/type_traits.h" // is_writer_v is_writer_trait
 
 #include <cstdint> // std::uint8_t std::uint32_t
-#include <memory> // std::unique_ptr
 #include <type_traits> // std::enable_if_t std::true_type
 
 
@@ -19,21 +18,14 @@ public:
 	writer(writer&& other) noexcept;
 	writer& operator=(writer const&) = delete;
 	writer& operator=(writer&& other) noexcept;
-	~writer();
+	~writer() noexcept;
 	void swap(writer& other) noexcept;
 public:
 	template<typename T, typename = std::enable_if_t<is_writer_v<T>>>
-	explicit writer(T&& t);
-public:
+	explicit writer(T&& writer);
 	void write_bytes(std::uint8_t const* const& buffer, std::uint32_t const& size);
-	writer_wrapper_base* get() const; // unit tests and debug only
 private:
-	template<typename T>
-	void init(T&& t, std::true_type const&);
-	template<typename T>
-	void init(T&& t, std::false_type const&);
-	std::unique_ptr<writer_wrapper_base, writer_wrapper_base_destroyer> m_writer_wrapper;
-	void* m_storage[2];
+	type_eraser<void, std::uint8_t const* const&, std::uint32_t const&> m_type_eraser;
 };
 
 inline void swap(writer& a, writer& b) noexcept { a.swap(b); }

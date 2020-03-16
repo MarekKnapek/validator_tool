@@ -1,10 +1,16 @@
 #pragma once
+#ifndef type_eraser_h_included
+#define type_eraser_h_included
 
 #include "verify.h" // VERIFY
 
 #include <type_traits> // std::enable_if
 #include <utility> // std::declval std::move
 #include <memory> // std::addressof std::unique_ptr
+
+
+#pragma push_macro("small")
+#undef small
 
 
 class type_eraser_true_type
@@ -21,7 +27,12 @@ public:
 
 
 template<bool>
-class type_eraser_bool_to_type : public type_eraser_false_type
+class type_eraser_bool_to_type
+{
+};
+
+template<>
+class type_eraser_bool_to_type<false> : public type_eraser_false_type
 {
 };
 
@@ -44,9 +55,16 @@ template<typename R, typename... A>
 class type_eraser_wrapper_base
 {
 public:
+	type_eraser_wrapper_base() noexcept = default;
+	type_eraser_wrapper_base(type_eraser_wrapper_base const&) = delete;
+	type_eraser_wrapper_base(type_eraser_wrapper_base&&) noexcept = default;
+	type_eraser_wrapper_base& operator=(type_eraser_wrapper_base const&) = delete;
+	type_eraser_wrapper_base& operator=(type_eraser_wrapper_base&&) noexcept = default;
+	~type_eraser_wrapper_base() noexcept = default;
+public:
 	void move_to(type_eraser_wrapper_base* const& storage)
 	{
-		return move_to(storage);
+		return do_move_to(storage);
 	}
 	void destroy()
 	{
@@ -65,6 +83,13 @@ protected:
 template<typename... A>
 class type_eraser_wrapper_base<void, A...>
 {
+public:
+	type_eraser_wrapper_base() noexcept = default;
+	type_eraser_wrapper_base(type_eraser_wrapper_base const&) = delete;
+	type_eraser_wrapper_base(type_eraser_wrapper_base&&) noexcept = default;
+	type_eraser_wrapper_base& operator=(type_eraser_wrapper_base const&) = delete;
+	type_eraser_wrapper_base& operator=(type_eraser_wrapper_base&&) noexcept = default;
+	~type_eraser_wrapper_base() noexcept = default;
 public:
 	void move_to(type_eraser_wrapper_base* const& storage)
 	{
@@ -101,13 +126,24 @@ template<typename T, typename F, bool B, typename R, typename... A>
 class type_eraser_wrapper : public type_eraser_wrapper_base<R, A...>
 {
 public:
+	type_eraser_wrapper() noexcept = default;
+	type_eraser_wrapper(type_eraser_wrapper const&) = delete;
+	type_eraser_wrapper(type_eraser_wrapper&&) noexcept = default;
+	type_eraser_wrapper& operator=(type_eraser_wrapper const&) = delete;
+	type_eraser_wrapper& operator=(type_eraser_wrapper&&) noexcept = default;
+	~type_eraser_wrapper() noexcept = default;
+public:
 	type_eraser_wrapper(T&& t) :
 		type_eraser_wrapper_base<R, A...>(),
 		m_wrapped(std::move(t))
 	{
 	}
 public:
-	virtual void do_move_to(type_eraser_wrapper_base<R, A...>* const& /*storage*/) override{}
+	virtual void do_move_to(type_eraser_wrapper_base<R, A...>* const& p_storage) override
+	{
+		VERIFY((dynamic_cast<type_eraser_wrapper<T, F, B, R, A...>*>(this)));
+		::new(p_storage) type_eraser_wrapper<T, F, B, R, A...>(std::move(*static_cast<type_eraser_wrapper<T, F, B, R, A...>*>(this)));
+	}
 	virtual void do_destroy() override
 	{
 		destroy(type_eraser_bool_to_type<B>{});
@@ -133,13 +169,23 @@ template<typename T, typename F, bool B, typename... A>
 class type_eraser_wrapper<T, F, B, void, A...> : public type_eraser_wrapper_base<void, A...>
 {
 public:
+	type_eraser_wrapper() noexcept = default;
+	type_eraser_wrapper(type_eraser_wrapper const&) = delete;
+	type_eraser_wrapper(type_eraser_wrapper&&) noexcept = default;
+	type_eraser_wrapper& operator=(type_eraser_wrapper const&) = delete;
+	type_eraser_wrapper& operator=(type_eraser_wrapper&&) noexcept = default;
+	~type_eraser_wrapper() noexcept = default;
+public:
 	type_eraser_wrapper(T&& t) :
 		type_eraser_wrapper_base<void, A...>(),
 		m_wrapped(std::move(t))
 	{
 	}
 public:
-	virtual void do_move_to(type_eraser_wrapper_base<void, A...>* const& /*storage*/) override{}
+	virtual void do_move_to(type_eraser_wrapper_base<void, A...>* const& p_storage) override
+	{
+		::new(p_storage) type_eraser_wrapper<T, F, B, void, A...>(std::move(*this));
+	}
 	virtual void do_destroy() override
 	{
 		destroy(type_eraser_bool_to_type<B>{});
@@ -179,9 +225,37 @@ public:
 		init(std::move(t), f, type_eraser_bool_to_type<(sizeof(type_eraser_wrapper<T, F, true, R, A...>) <= sizeof(m_storage.m_ptrs)) && (alignof(type_eraser_wrapper<T, F, true, R, A...>) <= alignof(decltype(m_storage.m_ptrs)))>{});
 	}
 	type_eraser(type_eraser const&) = delete;
-	type_eraser(type_eraser&&) = delete;
+	type_eraser(type_eraser&& other) :
+		type_eraser()
+	{
+		*this = std::move(other);
+	}
 	type_eraser& operator=(type_eraser const&) = delete;
-	type_eraser& operator=(type_eraser&&) = delete;
+	type_eraser& operator=(type_eraser&& other) noexcept
+	{
+		VERIFY(this != std::addressof(other));
+		clear();
+		if(!other.empty())
+		{
+			if(other.small())
+			{
+				auto const& this_storage = reinterpret_cast<type_eraser_wrapper_base<R, A...>*>(std::addressof(m_storage.m_chars));
+				other.m_p_wrapper->move_to(this_storage);
+				other.m_p_wrapper.reset();
+				m_p_wrapper.reset(this_storage);
+			}
+			else
+			{
+				m_p_wrapper.reset(other.m_p_wrapper.release());
+			}
+		}
+		return *this;
+	}
+	void swap(type_eraser& other) noexcept
+	{
+		VERIFY(this != std::addressof(other));
+		std::swap(*this, other);
+	}
 	~type_eraser()
 	{
 	}
@@ -189,6 +263,19 @@ public:
 	{
 		VERIFY(m_p_wrapper);
 		return m_p_wrapper->call(a...);
+	}
+	bool empty() const
+	{
+		return !m_p_wrapper;
+	}
+	bool small() const
+	{
+		VERIFY(!empty());
+		return m_p_wrapper.get() == reinterpret_cast<type_eraser_wrapper_base<R, A...> const*>(std::addressof(m_storage.m_chars));
+	}
+	void clear()
+	{
+		m_p_wrapper.reset();
 	}
 public:
 	type_eraser_wrapper_base<R, A...>* get() const
@@ -219,3 +306,12 @@ private:
 	std::unique_ptr<type_eraser_wrapper_base<R, A...>, type_eraser_wrapper_base_deleter> m_p_wrapper;
 	storage_t m_storage;
 };
+
+template<typename R, typename... A>
+void swap(type_eraser<R, A...>& a, type_eraser<R, A...>& b) noexcept { a.swap(b); }
+
+
+#pragma pop_macro("small")
+
+
+#endif

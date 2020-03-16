@@ -1,12 +1,12 @@
 #include "txt2bin_impl.h"
 #if 0
 #include "utils/verify.h"
-#include "io/writer.h"
+#include "io/writer1.h"
 #include "Utils.h" // VERIFY
 #include "utils/scope_exit.h" // CswMakeScopeExit
 #include "io/line_reader.h"
-#include "io/windows_file_byte_reader.h"
-#include "io/windows_file_byte_writer.h"
+#include "io/windows_file_reader.h"
+#include "io/windows_file_writer.h"
 #include "io/buffered_writer.h"
 #include "utils/convert.h"
 

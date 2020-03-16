@@ -3,7 +3,7 @@
 #include "utils/scope_exit.h"
 #include "com_port.h"
 #include "comm_response_packet.h"
-#include "io/windows_file_byte_writer.h"
+#include "io/windows_file_writer.h"
 #include "io/buffered_writer.h"
 #include "utils/verify.h"
 
@@ -53,7 +53,7 @@ int hw2bin_impl(std::uint8_t const& com_port_number, wchar_t const* const& file_
 		VERIFY(close_ret != 0);
 	});
 
-	windows_file_byte_writer wfbw(file_handle);
+	windows_file_writer wfbw(file_handle);
 	auto wrtr = buffered_writer(writer(std::ref(wfbw)));
 
 	unsigned addr_old = 0;

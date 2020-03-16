@@ -1,8 +1,8 @@
 #include "../io/buffered_writer.h" // buffered_writer
 #include "../io/line_reader.h" // make_line_reader
 #include "../io/srec_reader.h" // make_srec_reader
-#include "../io/windows_file_byte_reader.h" // windows_file_byte_reader
-#include "../io/windows_file_byte_writer.h" // windows_file_byte_writer
+#include "../io/windows_file_reader.h" // windows_file_reader
+#include "../io/windows_file_writer.h" // windows_file_writer
 #include "../utils/scope_exit.h" // mk::make_scope_exit
 #include "../utils/verify.h" // VERIFY
 
@@ -56,10 +56,10 @@ int hex2bin_impl(wchar_t const* const& input_file_name, wchar_t const* const& ou
 		VERIFY(ret != 0);
 	});
 
-	windows_file_byte_reader wfbr(input_file_handle);
+	windows_file_reader wfbr(input_file_handle);
 	auto line_reader = make_line_reader(wfbr);
 	auto reader = make_srec_reader(line_reader);
-	windows_file_byte_writer wfbw(output_file_handle);
+	windows_file_writer wfbw(output_file_handle);
 	auto wrtr = buffered_writer(writer(std::ref(wfbw)));
 	for(;;)
 	{

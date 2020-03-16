@@ -435,12 +435,11 @@ int Bin2Txt()
 
 
 #include "../io/windows_file.h"
-#include "../io/windows_file_byte_reader.h"
-#include "../io/windows_file_byte_writer.h"
+#include "../io/windows_file_reader.h"
+#include "../io/windows_file_writer.h"
 #include "../io/buffered_reader.h"
 #include "../io/buffered_writer.h"
 #include "../io/txt_writer.h"
-#include "../io/writer.h"
 
 
 int bin2txt_impl(wchar_t const* const& input_file_name, wchar_t const* const& output_bank1_file_name, wchar_t const* const& output_bank2_file_name, wchar_t const* const& output_bank3_file_name, wchar_t const* const& output_bank4_file_name, wchar_t const* const& output_calibration_file_name)
@@ -475,7 +474,7 @@ int bin2txt_impl(wchar_t const* const& input_file_name, wchar_t const* const& ou
 	(void)output_bank4_file_name;
 	(void)output_calibration_file_name;
 
-	windows_file_byte_writer wfbw{HANDLE{}};
+	windows_file_writer wfbw{HANDLE{}};
 	buffered_writer bw{writer{std::ref(wfbw)}};
 
 	writer w{std::ref(bw)};
